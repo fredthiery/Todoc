@@ -9,6 +9,8 @@ import androidx.lifecycle.Transformations;
 
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.repository.RoomTaskRepository;
+import com.cleanup.todoc.repository.TaskRepository;
 
 import java.util.List;
 
@@ -17,15 +19,15 @@ public class TaskViewModel extends AndroidViewModel {
     private final TaskRepository repository;
     private final LiveData<List<Task>> tasks;
     private final LiveData<List<Project>> projects;
-    private final MutableLiveData<SortOrder> sortOrder = new MutableLiveData<>();
+    private final MutableLiveData<Task.SortMethod> sortMethod = new MutableLiveData<>();
 
     public TaskViewModel(Application application) {
         super(application);
         // Initialise le repository
-        repository = new TaskRepository(application);
-        setSort(SortOrder.OLD);
+        repository = new RoomTaskRepository(application);
+        setSort(Task.SortMethod.OLD_FIRST);
         // Permet de mettre à jour notre LiveData quand on modifie l'ordre de tri
-        tasks = Transformations.switchMap(sortOrder, repository::getTasks);
+        tasks = Transformations.switchMap(sortMethod, repository::getTasks);
         projects = repository.getProjects();
     }
 
@@ -49,7 +51,7 @@ public class TaskViewModel extends AndroidViewModel {
         repository.remove(task);
     }
 
-    public void setSort(SortOrder order) {
-        sortOrder.setValue(order);
+    public void setSort(Task.SortMethod sortMethod) {
+        this.sortMethod.setValue(sortMethod);
     }
 }

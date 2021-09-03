@@ -1,10 +1,8 @@
-package com.cleanup.todoc;
+package com.cleanup.todoc.database;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -24,7 +22,7 @@ public abstract class TaskRoomDatabase extends RoomDatabase {
 
     // L'ExecutorService sert pour les appels asymchrones à la base de données
     private static final int NUMBER_OF_THREADS = 4;
-    static final ExecutorService databaseWriteExecutor =
+    public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     // Le Data Access Object qui sert à faire les requêtes vers la base de données
@@ -46,7 +44,7 @@ public abstract class TaskRoomDatabase extends RoomDatabase {
     };
 
     // Renvoie l'instance de la base de données ou la crée si elle n'existe pas encore
-    static TaskRoomDatabase getDatabase(final Context context) {
+    public static TaskRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (TaskRoomDatabase.class) {
                 if (INSTANCE == null) {

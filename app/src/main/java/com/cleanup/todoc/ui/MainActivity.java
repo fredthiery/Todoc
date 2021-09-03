@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.TaskViewModel;
 import com.cleanup.todoc.model.Project;
-import com.cleanup.todoc.SortOrder;
 import com.cleanup.todoc.model.Task;
 
 import java.util.Date;
@@ -136,13 +135,13 @@ public class MainActivity extends AppCompatActivity implements TaskListAdapter.D
         int id = item.getItemId();
 
         if (id == R.id.filter_alphabetical) {
-            taskViewModel.setSort(SortOrder.AZ);
+            taskViewModel.setSort(Task.SortMethod.ALPHABETICAL);
         } else if (id == R.id.filter_alphabetical_inverted) {
-            taskViewModel.setSort(SortOrder.ZA);
+            taskViewModel.setSort(Task.SortMethod.ALPHABETICAL_INVERTED);
         } else if (id == R.id.filter_oldest_first) {
-            taskViewModel.setSort(SortOrder.OLD);
+            taskViewModel.setSort(Task.SortMethod.OLD_FIRST);
         } else if (id == R.id.filter_recent_first) {
-            taskViewModel.setSort(SortOrder.RECENT);
+            taskViewModel.setSort(Task.SortMethod.RECENT_FIRST);
         }
 
         return super.onOptionsItemSelected(item);
