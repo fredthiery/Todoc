@@ -3,6 +3,8 @@ package com.cleanup.todoc;
 import static com.cleanup.todoc.TestUtils.getOrAwaitValue;
 import static com.google.common.truth.Truth.assertThat;
 
+import static org.junit.Assert.assertTrue;
+
 import android.content.Context;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -55,55 +57,64 @@ public class DatabaseUnitTest {
     @Test
     public void writeTaskAndReadInList() throws InterruptedException {
         // Given
-        List<Task> expectedTasks = Arrays.asList(task1, task2, task3);
+        List<Task> expectedTasks = Arrays.asList(task3, task2, task1);
         // When
         dao.insert(Arrays.asList(task1, task2, task3));
         List<Task> result = getOrAwaitValue(dao.getTasksUnsorted());
         // Then
-        assertThat(result).isEqualTo(expectedTasks);
+        //assertTrue(result.size() == expectedTasks.size() && result.containsAll(expectedTasks) && expectedTasks.containsAll(result));
+        assertThat(result).containsExactlyElementsIn(expectedTasks);
     }
 
     @Test
     public void testSortAZ() throws InterruptedException {
         // Given
         List<Task> expectedTasks = Arrays.asList(task1, task3, task2);
+        List<Task> unExpectedTasks = Arrays.asList(task1, task2, task3);
         // When
         dao.insert(Arrays.asList(task1, task2, task3));
         List<Task> result = getOrAwaitValue(dao.getTasksSortedByAZ());
         // Then
         assertThat(result).isEqualTo(expectedTasks);
+        assertThat(result).isNotEqualTo(unExpectedTasks);
     }
 
     @Test
     public void testSortZA() throws InterruptedException {
         // Given
         List<Task> expectedTasks = Arrays.asList(task2, task3, task1);
+        List<Task> unExpectedTasks = Arrays.asList(task1, task2, task3);
         // When
         dao.insert(Arrays.asList(task1, task2, task3));
         List<Task> result = getOrAwaitValue(dao.getTasksSortedByZA());
         // Then
         assertThat(result).isEqualTo(expectedTasks);
+        assertThat(result).isNotEqualTo(unExpectedTasks);
     }
 
     @Test
     public void testSortRecent() throws InterruptedException {
         // Given
         List<Task> expectedTasks = Arrays.asList(task3, task2, task1);
+        List<Task> unExpectedTasks = Arrays.asList(task1, task2, task3);
         // When
         dao.insert(Arrays.asList(task1, task2, task3));
         List<Task> result = getOrAwaitValue(dao.getTasksSortedByRecent());
         // Then
         assertThat(result).isEqualTo(expectedTasks);
+        assertThat(result).isNotEqualTo(unExpectedTasks);
     }
 
     @Test
     public void testSortOld() throws InterruptedException {
         // Given
         List<Task> expectedTasks = Arrays.asList(task1, task2, task3);
+        List<Task> unExpectedTasks = Arrays.asList(task3, task2, task1);
         // When
         dao.insert(Arrays.asList(task1, task2, task3));
         List<Task> result = getOrAwaitValue(dao.getTasksSortedByOld());
         // Then
         assertThat(result).isEqualTo(expectedTasks);
+        assertThat(result).isNotEqualTo(unExpectedTasks);
     }
 }
